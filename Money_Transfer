@@ -1,0 +1,121 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyP5148S09ZNpFAOGUdnGgHS",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/BrunthaC/Live-Time-Series/blob/main/Money_Transfer\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "nUTbo5lWKB_B",
+        "outputId": "baaf5ab8-183a-4c7c-e39f-566f85b9cffa"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Sending verification code to mobile number: 1234567890\n",
+            "SMS content:\n",
+            "Verification code: 1234\n",
+            "Transfer amount: 200\n",
+            "Recipient Account: 987654321\n",
+            "Enter the verification code: 1234\n",
+            "Amount 200 transferred successfully to Account 987654321.\n",
+            "Account 123456789 balance: 800\n",
+            "Account 987654321 balance: 700\n"
+          ]
+        }
+      ],
+      "source": [
+        "import time\n",
+        "\n",
+        "class BankAccount:\n",
+        "    def __init__(self, account_number, balance, mobile_number):\n",
+        "        self.account_number = account_number\n",
+        "        self.balance = balance\n",
+        "        self.mobile_number = mobile_number\n",
+        "\n",
+        "    def deposit(self, amount):\n",
+        "        self.balance += amount\n",
+        "        print(f\"Amount {amount} deposited successfully.\")\n",
+        "\n",
+        "    def withdraw(self, amount):\n",
+        "        if self.balance >= amount:\n",
+        "            self.balance -= amount\n",
+        "            print(f\"Amount {amount} withdrawn successfully.\")\n",
+        "        else:\n",
+        "            print(\"Insufficient balance.\")\n",
+        "\n",
+        "    def transfer(self, recipient_account, amount):\n",
+        "        if self.balance >= amount:\n",
+        "            verification_sent = self.send_verification(recipient_account, amount)\n",
+        "            if verification_sent:\n",
+        "                verification_code = input(\"Enter the verification code: \")\n",
+        "                if self.verify_code(recipient_account, amount, verification_code):\n",
+        "                    self.balance -= amount\n",
+        "                    recipient_account.balance += amount\n",
+        "                    print(f\"Amount {amount} transferred successfully to Account {recipient_account.account_number}.\")\n",
+        "                else:\n",
+        "                    self.balance += amount\n",
+        "                    print(\"Verification code is incorrect. Transfer canceled.\")\n",
+        "            else:\n",
+        "                print(\"Failed to send the verification code. Transfer canceled.\")\n",
+        "        else:\n",
+        "            print(\"Insufficient balance.\")\n",
+        "\n",
+        "    def send_verification(self, recipient_account, amount):\n",
+        "        # Simulating sending SMS verification\n",
+        "        verification_code = \"1234\"  # Simulated verification code\n",
+        "        message = f\"Verification code: {verification_code}\\nTransfer amount: {amount}\\nRecipient Account: {recipient_account.account_number}\"\n",
+        "        # Simulate sending SMS using external API or messaging service\n",
+        "        print(f\"Sending verification code to mobile number: {self.mobile_number}\")\n",
+        "        print(\"SMS content:\")\n",
+        "        print(message)\n",
+        "        time.sleep(2)  # Simulating delay for sending SMS\n",
+        "        return True\n",
+        "\n",
+        "    def verify_code(self, recipient_account, amount, verification_code):\n",
+        "        # Simulated verification code check\n",
+        "        simulated_verification_code = \"1234\"\n",
+        "        return verification_code == simulated_verification_code\n",
+        "\n",
+        "\n",
+        "# Example usage\n",
+        "account1 = BankAccount(\"123456789\", 1000, \"1234567890\")\n",
+        "account2 = BankAccount(\"987654321\", 500, \"9876543210\")\n",
+        "\n",
+        "account1.transfer(account2, 200)  # Transfer $200 from account1 to account2\n",
+        "\n",
+        "print(f\"Account {account1.account_number} balance: {account1.balance}\")\n",
+        "print(f\"Account {account2.account_number} balance: {account2.balance}\")"
+      ]
+    }
+  ]
+}
